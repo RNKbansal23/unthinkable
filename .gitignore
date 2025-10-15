@@ -1,0 +1,15 @@
+# Python virtual environment
+venv/
+.venv/
+
+# Python cache files
+__pycache__/
+
+# Environment variables (NEVER commit these)
+.env
+
+# Node.js dependencies (huge folder, should be ignored)
+node_modules/
+
+# VS Code specific files
+.vscode/

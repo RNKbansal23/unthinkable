@@ -1,0 +1,36 @@
+/* frontend/src/components/ProductCard.css */
+.product-card {
+  border: 1px solid #ddd;
+  border-radius: 8px;
+  padding: 1rem;
+  margin: 1rem;
+  width: 200px;
+  text-align: center;
+  box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+  background-color: #fff;
+}
+
+.product-image {
+  width: 100%;
+  height: 200px;
+  object-fit: cover;
+  border-radius: 4px;
+}
+
+.product-info {
+  padding-top: 0.5rem;
+}
+
+.product-name {
+  font-size: 1rem;
+  margin: 0.5rem 0;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.product-category, .product-score {
+  font-size: 0.9rem;
+  color: #555;
+  margin: 0.25rem 0;
+}
