@@ -1,6 +1,5 @@
-// frontend/src/components/ProductCard.js
 import React from 'react';
-import './ProductCard.css'; // We'll create this file for styling
+import './ProductCard.css';
 
 const ProductCard = ({ product }) => {
   // The backend now serves images from http://localhost:5000/images/
@@ -11,7 +10,7 @@ const ProductCard = ({ product }) => {
     <div className="product-card">
       <img src={imageUrl} alt={product.product_details.name} className="product-image" />
       <div className="product-info">
-        <h3 className="product-name">{product.product_details.name}</h3>
+        <h3 className="product-name" title={product.product_details.name}>{product.product_details.name}</h3>
         <p className="product-category">{product.product_details.category}</p>
         <p className="product-score">Similarity: {score}%</p>
       </div>

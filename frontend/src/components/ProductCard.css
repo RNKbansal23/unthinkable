@@ -1,13 +1,15 @@
-/* frontend/src/components/ProductCard.css */
 .product-card {
-  border: 1px solid #ddd;
+  border: 1px solid #444;
   border-radius: 8px;
   padding: 1rem;
-  margin: 1rem;
+  margin: 0.5rem;
   width: 200px;
   text-align: center;
-  box-shadow: 0 2px 4px rgba(0,0,0,0.1);
-  background-color: #fff;
+  box-shadow: 0 4px 8px rgba(0,0,0,0.2);
+  background-color: #3a3f4a;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
 }
 
 .product-image {
@@ -15,6 +17,7 @@
   height: 200px;
   object-fit: cover;
   border-radius: 4px;
+  background-color: #fff; /* White background for transparent images */
 }
 
 .product-info {
@@ -26,11 +29,11 @@
   margin: 0.5rem 0;
   white-space: nowrap;
   overflow: hidden;
-  text-overflow: ellipsis;
+  text-overflow: ellipsis; /* Shows '...' if name is too long */
 }
 
 .product-category, .product-score {
   font-size: 0.9rem;
-  color: #555;
+  color: #ccc;
   margin: 0.25rem 0;
 }

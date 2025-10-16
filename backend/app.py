@@ -12,28 +12,23 @@ CORS(app)
 
 # --- AI MODEL & DATABASE LOADING (Runs ONCE at startup) ---
 print("Loading AI Model and Product Database...")
-
-# Load the AI model from the cache (this will be fast)
-MODEL_NAME = "openai/clip-vit-base-patch32"
-model = CLIPModel.from_pretrained(MODEL_NAME)
-processor = CLIPProcessor.from_pretrained(MODEL_NAME)
+model = CLIPModel.from_pretrained("openai/clip-vit-base-patch32")
+processor = CLIPProcessor.from_pretrained("openai/clip-vit-base-patch32")
 print("AI Model loaded.")
 
-# Load the product database with embeddings into memory
 with open('products.json', 'r') as f:
     product_database = json.load(f)
 
-# Convert all product embeddings from lists to PyTorch Tensors for fast computation
 for product in product_database:
-    product['embedding'] = torch.tensor(product['embedding'])
+    # Ensure embedding exists before converting
+    if 'embedding' in product and product['embedding']:
+        product['embedding'] = torch.tensor(product['embedding'])
 print(f"Product database loaded with {len(product_database)} items.")
 # -------------------------------------------------------------
 
-# --- API Route to serve product images ---
 @app.route('/images/<path:filename>')
 def serve_image(filename):
     return send_from_directory('product_images', filename)
-# -----------------------------------------
 
 @app.route('/api/find_similar', methods=['POST'])
 def find_similar():
@@ -52,14 +47,16 @@ def find_similar():
             uploaded_image_features = model.get_image_features(**inputs)
 
         # 2. Calculate Similarity Scores
-        # We'll use Cosine Similarity, a standard for comparing vectors
         similarities = []
         for product in product_database:
-            # Calculate cosine similarity between the uploaded image and a product in the database
+            # Skip any product that might be missing an embedding
+            if 'embedding' not in product or not isinstance(product['embedding'], torch.Tensor):
+                continue
+
             similarity_score = torch.nn.functional.cosine_similarity(
                 uploaded_image_features,
-                product['embedding'].unsqueeze(0) # Add a dimension to match
-            ).item() # .item() gets the single number from the tensor
+                product['embedding'].unsqueeze(0)
+            ).item()
             
             similarities.append({
                 "product": product,
@@ -67,17 +64,13 @@ def find_similar():
             })
         
         # 3. Sort Products by Score
-        # We sort in descending order to get the highest scores first
         sorted_products = sorted(similarities, key=lambda x: x['score'], reverse=True)
 
-# backend/app.py
-
-        # 4. Return the Top 5 Matches (NEW, SAFER VERSION)
-        # Create a clean list of results to send to the frontend.
+        # 4. Return the Top 5 Matches (CORRECTED, SAFE VERSION)
+        # Create a clean list of results to avoid modifying the in-memory database.
         top_5_results = []
         for match in sorted_products[:5]:
-            # Create a new dictionary with only the information the frontend needs.
-            # This avoids modifying the original database objects.
+            # Create a new dictionary with only the info the frontend needs.
             product_details = {
                 "id": match['product']['id'],
                 "name": match['product']['name'],
@@ -92,5 +85,13 @@ def find_similar():
 
         return jsonify(top_5_results)
 
+    except Exception as e:
+        print(f"Error processing image: {e}")
+        return jsonify({'error': f'An error occurred: {e}'}), 500
+
+# At the very bottom of backend/app.py
+
 if __name__ == '__main__':
-    app.run(debug=True, port=5000)
+    # Get the port from the environment variable, defaulting to 5000 for local development
+    port = int(os.environ.get('PORT', 5000))
+    app.run(debug=False, host='0.0.0.0', port=port)

@@ -2,37 +2,67 @@
   text-align: center;
 }
 
-.App-logo {
-  height: 40vmin;
-  pointer-events: none;
-}
-
-@media (prefers-reduced-motion: no-preference) {
-  .App-logo {
-    animation: App-logo-spin infinite 20s linear;
-  }
-}
-
 .App-header {
   background-color: #282c34;
   min-height: 100vh;
   display: flex;
   flex-direction: column;
   align-items: center;
-  justify-content: center;
+  justify-content: flex-start; /* Align to top */
+  padding-top: 4rem;
   font-size: calc(10px + 2vmin);
   color: white;
 }
 
-.App-link {
-  color: #61dafb;
+.subtitle {
+  font-size: 1rem;
+  color: #aaa;
+  margin-top: -1rem;
+  margin-bottom: 2rem;
 }
 
-@keyframes App-logo-spin {
-  from {
-    transform: rotate(0deg);
-  }
-  to {
-    transform: rotate(360deg);
-  }
+/* --- Error Message Style --- */
+.error-message {
+  color: #ff4d4d;
+  background-color: #ffe5e5;
+  border: 1px solid #ff4d4d;
+  padding: 1rem;
+  border-radius: 8px;
+  margin-top: 2rem;
+  max-width: 500px;
+}
+
+/* --- Image Preview Styles --- */
+.image-preview-container {
+  margin-top: 2rem;
+  text-align: center;
+}
+
+.image-preview {
+  max-width: 300px;
+  max-height: 300px;
+  border: 2px solid #ddd;
+  border-radius: 8px;
+  margin-top: 1rem;
+}
+
+/* --- Filter Slider Styles --- */
+.filter-container {
+  margin: 2rem 0;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.5rem;
+  background-color: #3a3f4a;
+  padding: 1rem 1.5rem;
+  border-radius: 8px;
+}
+
+.filter-container label {
+  font-size: 0.9rem;
+}
+
+.filter-container input[type="range"] {
+  width: 300px;
+  cursor: pointer;
 }
